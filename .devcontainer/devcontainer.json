@@ -1,0 +1,30 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/go
+{
+	"name": "Python",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"dockerComposeFile": ["../docker-compose.yml","../development.yml"],
+    "service": "web",
+	"runServices":["web","db","nginx"],
+    "workspaceFolder": "/app",
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Configure tool-specific properties.
+	"customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python"
+            ]
+        }    
+    }
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+
+	//"postCreateCommand": "go install github.com/go-delve/delve/cmd/dlv@latest & go install github.com/air-verse/air@latest"
+}

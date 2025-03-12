@@ -1,0 +1,24 @@
+FROM python:3.12
+
+
+COPY  vscodeinstall.sh /app/vscodeinstall.sh
+RUN chmod 755 /app/vscodeinstall.sh
+RUN /app/vscodeinstall.sh
+
+RUN apt-get -y update
+RUN apt-get -y upgrade
+RUN apt-get -y install default-mysql-client-core locales-all
+ENV LANG ja_JP.UTF-8
+
+RUN pip install --upgrade pip
+RUN pip install fastapi[all] mysql-connector-python requests python-ulid Pillow
+RUN pip install opencv-python numpy huggingface_hub ultralytics
+RUN pip install debugpy
+# poetryの定義ファイルをコピー (存在する場合)
+#COPY pyproject.toml* poetry.lock* ./
+
+# poetryでライブラリをインストール (pyproject.tomlが既にある場合)
+#RUN poetry config virtualenvs.in-project true
+#RUN if [ -f pyproject.toml ]; then poetry install --no-root; fi
+
+WORKDIR /app

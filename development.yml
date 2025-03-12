@@ -1,0 +1,7 @@
+services:
+    web:
+        build: 
+            context: ./dockerfiles/web/
+            dockerfile: "Dockerfile.dev"
+        environment:
+            - DEBUG=1

@@ -1,0 +1,5 @@
+storage/*
+dockerfiles/db/data/*
+dockerfiles/web/src/__pycache__/*
+.vscode/*
+tmp/*

@@ -1,0 +1,65 @@
+services:
+    nginx:
+        image: nginx:latest
+        ports:
+            - "80:80"
+        volumes:
+            - "./dockerfiles/nginx/public:/usr/share/nginx/html"    
+            - "./dockerfiles/nginx/default.conf:/etc/nginx/conf.d/default.conf"
+            - "./storage:/storage"
+        networks:
+            - frontend
+        depends_on:
+            - web
+    db:
+        image: mysql:latest
+        ports:
+            - "3307:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+            MYSQL_DATABASE: album
+            MYSQL_USER: $MYSQL_USER
+            MYSQL_PASSWORD: $MYSQL_PASSWORD
+        networks:
+            - backend
+        healthcheck:   # here
+            test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+            interval: 1s
+            timeout: 5s
+            retries: 20
+            start_period: 3s
+
+        volumes:
+            - "./dockerfiles/db/data:/var/lib/mysql"
+            - "./dockerfiles/db/initdb.d:/docker-entrypoint-initdb.d"
+            - "./dockerfiles/db/conf.d:/etc/mysql/conf.d/my.cnf"
+    web:
+        build: 
+            context: ./dockerfiles/web/
+            dockerfile: "Dockerfile.prod"
+        volumes:
+            - "./dockerfiles/web/src:/app"
+            - "./storage:/storage"
+            - /home/pitpe/Pictures:/Pictures
+        networks:
+            - frontend
+            - backend
+        depends_on:
+            db:
+                condition: service_healthy
+        command: uvicorn main:app --reload --host 0.0.0.0 --port 80
+        
+        environment:
+            account_server: $account_server
+            file_storage: $file_storage
+            MYSQL_USER: $MYSQL_USER
+            MYSQL_PASSWORD: $MYSQL_PASSWORD
+networks:
+    backend:
+        driver: bridge    
+        ipam:
+            driver: default
+    frontend:
+        driver: bridge    
+        ipam:
+            driver: default

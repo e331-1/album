@@ -1,0 +1,17 @@
+FROM python:3.12
+
+RUN apt-get -y update
+RUN apt-get -y upgrade
+
+RUN pip install -U pip
+RUN pip install opencv-python           --verbose --default-timeout=1000
+RUN pip install fastapi[all]            --verbose --default-timeout=1000
+RUN pip install mysql-connector-python  --verbose --default-timeout=1000
+RUN pip install requests                --verbose --default-timeout=1000
+RUN pip install python-ulid             --verbose --default-timeout=1000
+RUN pip install Pillow                  --verbose --default-timeout=1000
+RUN pip install numpy                   --verbose --default-timeout=1000
+RUN pip install huggingface_hub         --verbose --default-timeout=1000
+RUN pip install ultralytics             --verbose --default-timeout=1000
+
+WORKDIR /app
