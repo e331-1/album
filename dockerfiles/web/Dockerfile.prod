@@ -2,6 +2,7 @@ FROM python:3.12
 
 RUN apt-get -y update
 RUN apt-get -y upgrade
+RUN apt-get -y install libopencv-dev
 
 RUN pip install -U pip
 RUN pip install opencv-python           --verbose --default-timeout=1000

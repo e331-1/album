@@ -69,9 +69,10 @@ async def create_upload_files(request: Request,uploadFiles: list[UploadFile]):
 
 
 @app.get("/get")
-async def get_post(request: Request,id:str,size:str="full"):
+async def get_post(request: Request,response: Response,id:str,size:str="full"):
     user=account.User(request)
     try:
+        response.headers["Cache-Control"] = "max-age=259200"
         return user.getPost(id,size)
     except Exception as e:
         return PlainTextResponse(content="404", status_code=404)
@@ -84,8 +85,8 @@ async def search_post(request: Request,s:str=""):
     except Exception as e:
         return PlainTextResponse(content="500", status_code=500)
 
-@app.get("/registorsFromLocal")
-async def search_post(request: Request):
+@app.get("/registerFromLocal")
+async def register_from_local(request: Request):
     user=account.User(request)
     try:
         user.registerFileFromPath()

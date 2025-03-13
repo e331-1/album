@@ -39,13 +39,18 @@ class PostElement extends HTMLElement {
         var url = `/api/get?id=${postULID}&size=thumbnail`;
 
         var response
-        const cache = await caches.open("thumbnailCache");
-        const cachedResponse = await cache.match(url);
-        if (cachedResponse) {
-            response = cachedResponse
-        } else {
-            response = await fetch(url);
-            await cache.put(url, response.clone());
+        
+        if(typeof caches=="undefined"){
+            response = await fetch(url).catch((e)=>{print("error",e)});
+        }else{
+            const cache = await caches.open("thumbnailCache");
+            const cachedResponse = await cache.match(url);
+            if (cachedResponse) {
+                response = cachedResponse
+            } else {
+                response = await fetch(url);
+                await cache.put(url, response.clone());
+            }
         }
 
 

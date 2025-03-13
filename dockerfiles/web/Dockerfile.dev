@@ -1,18 +1,23 @@
 FROM python:3.12
 
+RUN apt-get -y update
+RUN apt-get -y upgrade
+RUN apt-get -y install libopencv-dev
 
 COPY  vscodeinstall.sh /app/vscodeinstall.sh
 RUN chmod 755 /app/vscodeinstall.sh
 RUN /app/vscodeinstall.sh
 
-RUN apt-get -y update
-RUN apt-get -y upgrade
-RUN apt-get -y install default-mysql-client-core locales-all
-ENV LANG ja_JP.UTF-8
-
-RUN pip install --upgrade pip
-RUN pip install fastapi[all] mysql-connector-python requests python-ulid Pillow
-RUN pip install opencv-python numpy huggingface_hub ultralytics
+RUN pip install -U pip
+RUN pip install opencv-python           --verbose --default-timeout=1000
+RUN pip install fastapi[all]            --verbose --default-timeout=1000
+RUN pip install mysql-connector-python  --verbose --default-timeout=1000
+RUN pip install requests                --verbose --default-timeout=1000
+RUN pip install python-ulid             --verbose --default-timeout=1000
+RUN pip install Pillow                  --verbose --default-timeout=1000
+RUN pip install numpy                   --verbose --default-timeout=1000
+RUN pip install huggingface_hub         --verbose --default-timeout=1000
+RUN pip install ultralytics             --verbose --default-timeout=1000
 RUN pip install debugpy
 # poetryの定義ファイルをコピー (存在する場合)
 #COPY pyproject.toml* poetry.lock* ./

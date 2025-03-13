@@ -206,10 +206,11 @@ where tag_post_relation.tag_ID=%s;
     def registerFileFromPath(self):
         #for name in glob.glob('/Pictures/.*\.jpg'):
         #paths=glob.glob(r'/Pictures/スマホ写真/**/*.jpg', recursive=True)
-        paths=glob.glob(os.environ.get('search_directory'), recursive=True)
+        paths=glob.glob(r'/local/**/*.jpg', recursive=True)
         cursor = database.conn.cursor()
         for i,path in  enumerate(paths):
             try:
+                print("\n\n")
                 print("["+str(len(paths))+"/"+str(i)+"] : "+str(path))
                 postULID=str(ULID())
                 exif=load_exif(path)[0]
@@ -248,5 +249,4 @@ where tag_post_relation.tag_ID=%s;
             else:
                 index.index(postULID)
                 database.conn.commit()
-        print("\n\n")
         cursor.close()
